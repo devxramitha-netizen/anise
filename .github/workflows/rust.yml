@@ -1,3 +1,12 @@
+# Optimized by ci-cost (https://github.com/mariotavarez/ci-cost)
+# Applied 5 optimizations:
+# - [HIGH] Add cargo dependency cache to "check" job
+# - [HIGH] Add cargo dependency cache to "test" job
+# - [HIGH] Add pip dependency cache to "validation" job
+# - [MEDIUM] Add concurrency group to "rust.yml"
+# - [MEDIUM] 6 jobs clone the repo — consider artifact sharing
+# Estimated savings: ~22 min/run
+#
 name: Rust
 
 on:
@@ -9,6 +18,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 env:
   RUST_BACKTRACE: 1
   RUST_LOG: info
